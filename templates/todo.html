@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}To-Do{% endblock %}
+{% block heading %}To-Do List{% endblock %}
+{% block content %}
+
+<div class="card" style="margin-bottom:24px;">
+  <form method="POST" action="{{ url_for('main.todo_add') }}">
+    <div class="form-row">
+      <div class="field" style="flex:3;">
+        <label for="task">New task</label>
+        <input type="text" id="task" name="task" placeholder="e.g. Finish DBMS assignment" required autofocus>
+      </div>
+      <button type="submit" class="btn">Add Task</button>
+    </div>
+  </form>
+</div>
+
+{% if todos %}
+  {% for t in todos %}
+    <div class="list-card {% if t.done %}done{% endif %}">
+      <div class="main-text">{{ t.task }}</div>
+      <div style="display:flex; gap:8px;">
+        <form method="POST" action="{{ url_for('main.todo_toggle', todo_id=t._id) }}">
+          <button type="submit" class="btn small {% if not t.done %}mint{% else %}outline{% endif %}">
+            {{ 'Undo' if t.done else 'Mark Done' }}
+          </button>
+        </form>
+        <form method="POST" action="{{ url_for('main.todo_delete', todo_id=t._id) }}">
+          <button type="submit" class="btn small outline">Delete</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="empty-state">Nothing on your list yet. Add a task above.</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Timetable{% endblock %}
+{% block heading %}Weekly Timetable{% endblock %}
+{% block content %}
+
+<form method="POST" action="{{ url_for('main.timetable_save') }}">
+  <div style="overflow-x:auto;">
+    <table class="tt">
+      <thead>
+        <tr>
+          <th>Time</th>
+          {% for day in days %}<th>{{ day }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for slot in slots %}
+        <tr>
+          <td style="font-family:'Space Mono',monospace; font-weight:700;">{{ slot }}</td>
+          {% for day in days %}
+            {% set key = day ~ '|' ~ slot %}
+            <td><input type="text" name="{{ key }}" value="{{ grid.get(key, '') }}" placeholder="—"></td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <button type="submit" class="btn" style="margin-top:16px;">Save Timetable</button>
+</form>
+
+{% endblock %}

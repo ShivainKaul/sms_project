@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign up — Student Management System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="corner-tri tl"></div>
+  <div class="corner-tri br"></div>
+  <div class="auth-card">
+    <h1><span class="dot" style="width:10px;height:10px;background:var(--red);border-radius:50%;display:inline-block;"></span> Create your account</h1>
+    <p class="subtitle">Set up your student dashboard</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required autofocus>
+      </div>
+      <div class="field">
+        <label for="reg_no">Reg No</label>
+        <input type="text" id="reg_no" name="reg_no" required>
+      </div>
+      <div class="field">
+        <label for="college_id">College ID</label>
+        <input type="text" id="college_id" name="college_id" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="6">
+      </div>
+      <div class="field">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
+      </div>
+      <button type="submit" class="btn full">Sign Up</button>
+    </form>
+
+    <div class="auth-switch">
+      Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

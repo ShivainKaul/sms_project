@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}CGPA Calculator{% endblock %}
+{% block heading %}CGPA Calculator{% endblock %}
+{% block content %}
+
+<div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); margin-bottom:20px;">
+  <div class="card stat-card">
+    <div class="label">Current CGPA</div>
+    <div class="value">{{ latest_cgpa if latest_cgpa is not none else '—' }}</div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:24px;">
+  <h3 style="margin-top:0;">Add a semester</h3>
+  <form method="POST" action="{{ url_for('main.cgpa_add') }}" id="cgpa-form">
+    <div class="field" style="max-width:260px;">
+      <label for="semester_name">Semester name</label>
+      <input type="text" id="semester_name" name="semester_name" placeholder="e.g. Semester 3">
+    </div>
+
+    <div id="subject-rows">
+      <div class="subject-row">
+        <input class="sname" type="text" name="subject_name[]" placeholder="Subject" required>
+        <input class="scredit" type="number" name="credits[]" placeholder="Credits" min="0" step="0.5" required>
+        <select class="sgrade" name="grade[]" required>
+          {% for g in grade_points %}<option value="{{ g }}">{{ g }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin:12px 0;">
+      <button type="button" class="btn small outline" onclick="addSubjectRow()">+ Add Subject</button>
+    </div>
+
+    <button type="submit" class="btn">Save Semester</button>
+  </form>
+</div>
+
+<div class="section-title"><span class="chip"></span> Semester history</div>
+{% if semesters %}
+  {% for s in semesters %}
+    <div class="list-card">
+      <div>
+        <div class="main-text">{{ s.semester_name }} — SGPA {{ s.sgpa }}</div>
+        <div class="meta">{{ s.subjects|length }} subject(s) · {{ s.credits_total }} credits · Cumulative CGPA after this semester: {{ s.cumulative_cgpa }}</div>
+      </div>
+      <form method="POST" action="{{ url_for('main.cgpa_delete', sem_id=s._id) }}">
+        <button type="submit" class="btn small outline">Delete</button>
+      </form>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="empty-state">No semesters saved yet.</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

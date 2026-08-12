@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="grid">
+  <div class="card stat-card">
+    <div class="label">CGPA</div>
+    <div class="value">{{ latest_cgpa if latest_cgpa is not none else '—' }}</div>
+    <div class="sub"><a href="{{ url_for('main.cgpa') }}">View breakdown →</a></div>
+  </div>
+
+  <div class="card stat-card">
+    <div class="label">Attendance</div>
+    <div class="value {% if overall_attendance is not none and overall_attendance < 75 %}warn{% endif %}">
+      {{ overall_attendance ~ '%' if overall_attendance is not none else '—' }}
+    </div>
+    <div class="sub">
+      {% if low_attendance_count %}{{ low_attendance_count }} subject(s) below 75%{% else %}<a href="{{ url_for('main.attendance') }}">Log attendance →</a>{% endif %}
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <div class="label">To-Do</div>
+    <div class="value">{{ pending_todos }}</div>
+    <div class="sub">pending of {{ total_todos }} tasks</div>
+  </div>
+
+  <div class="card stat-card">
+    <div class="label">Notes Saved</div>
+    <div class="value">{{ notes_count }}</div>
+    <div class="sub"><a href="{{ url_for('main.notes') }}">Open Drive links →</a></div>
+  </div>
+</div>
+
+<div class="section-title"><span class="chip"></span> Upcoming reminders</div>
+{% if upcoming_reminders %}
+  {% for r in upcoming_reminders %}
+    <div class="list-card">
+      <div>
+        <div class="main-text">{{ r.title }}</div>
+        <div class="meta">{{ r.due.strftime('%d %b %Y, %I:%M %p') }}</div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="empty-state">No reminders yet. <a href="{{ url_for('main.reminders') }}">Add one</a>.</div>
+{% endif %}
+
+{% endblock %}

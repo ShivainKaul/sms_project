@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Attendance{% endblock %}
+{% block heading %}Attendance Calculator{% endblock %}
+{% block content %}
+
+<div class="card" style="margin-bottom:24px;">
+  <form method="POST" action="{{ url_for('main.attendance_add') }}">
+    <div class="form-row">
+      <div class="field">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="e.g. Operating Systems" required>
+      </div>
+      <div class="field">
+        <label for="attended">Classes attended</label>
+        <input type="number" id="attended" name="attended" min="0" required>
+      </div>
+      <div class="field">
+        <label for="total">Classes held</label>
+        <input type="number" id="total" name="total" min="1" required>
+      </div>
+      <button type="submit" class="btn">Save / Update</button>
+    </div>
+  </form>
+  <div class="meta" style="font-size:12px; opacity:0.65;">Saving the same subject again updates its record.</div>
+</div>
+
+{% if records %}
+  {% for r in records %}
+    <div class="list-card {% if r.percentage < 75 %}low{% endif %}">
+      <div>
+        <div class="main-text">{{ r.subject }}</div>
+        <div class="meta">{{ r.attended }}/{{ r.total }} classes · {{ r.advice }}</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="pill {% if r.percentage < 75 %}bad{% else %}good{% endif %}">{{ r.percentage }}%</span>
+        <form method="POST" action="{{ url_for('main.attendance_delete', rec_id=r._id) }}">
+          <button type="submit" class="btn small outline">Delete</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="empty-state">No attendance logged yet. Add a subject above.</div>
+{% endif %}
+
+{% endblock %}

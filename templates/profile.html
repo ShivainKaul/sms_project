@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block heading %}My Profile{% endblock %}
+{% block content %}
+
+<div class="card" style="margin-bottom: 24px;">
+  <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+    <div>
+      <h2 style="margin:0 0 4px;">{{ current_user.name }}</h2>
+      <div class="meta" style="opacity:0.7; font-size:13px;">{{ current_user.email }}</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <span class="pill good">Reg No: {{ current_user.reg_no }}</span>
+      <span class="pill good">College ID: {{ current_user.college_id }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card stat-card">
+    <div class="label">CGPA</div>
+    <div class="value">{{ latest_cgpa if latest_cgpa is not none else '—' }}</div>
+    <div class="sub">across {{ semesters_count }} semester(s)</div>
+  </div>
+  <div class="card stat-card">
+    <div class="label">Attendance</div>
+    <div class="value {% if overall_attendance is not none and overall_attendance < 75 %}warn{% endif %}">
+      {{ overall_attendance ~ '%' if overall_attendance is not none else '—' }}
+    </div>
+    <div class="sub">overall, all subjects</div>
+  </div>
+  <div class="card stat-card">
+    <div class="label">Notes Saved</div>
+    <div class="value">{{ notes_count }}</div>
+    <div class="sub">Google Drive links</div>
+  </div>
+  <div class="card stat-card">
+    <div class="label">Tasks Tracked</div>
+    <div class="value">{{ todos_count }}</div>
+    <div class="sub">total to-do items</div>
+  </div>
+</div>
+
+{% endblock %}

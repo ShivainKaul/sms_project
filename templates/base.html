@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Student Management System{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span> SMS</div>
+    <a class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <a class="nav-link {% if request.endpoint == 'main.timetable' %}active{% endif %}" href="{{ url_for('main.timetable') }}">Timetable</a>
+    <a class="nav-link {% if request.endpoint == 'main.notes' %}active{% endif %}" href="{{ url_for('main.notes') }}">Notes</a>
+    <a class="nav-link {% if request.endpoint == 'main.todo' %}active{% endif %}" href="{{ url_for('main.todo') }}">To-Do</a>
+    <a class="nav-link {% if request.endpoint == 'main.reminders' %}active{% endif %}" href="{{ url_for('main.reminders') }}">Reminders</a>
+    <a class="nav-link {% if request.endpoint == 'main.cgpa' %}active{% endif %}" href="{{ url_for('main.cgpa') }}">CGPA Calculator</a>
+    <a class="nav-link {% if request.endpoint == 'main.attendance' %}active{% endif %}" href="{{ url_for('main.attendance') }}">Attendance</a>
+    <a class="nav-link {% if request.endpoint == 'main.profile' %}active{% endif %}" href="{{ url_for('main.profile') }}">Profile</a>
+    <a class="nav-link" href="{{ url_for('auth.logout') }}">Log out</a>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>{% block heading %}{% endblock %}</h1>
+        <div class="greet">Hey {{ current_user.name }} — {{ current_user.reg_no }}</div>
+      </div>
+      {% block topbar_action %}{% endblock %}
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>
